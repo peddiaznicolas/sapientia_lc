@@ -1,0 +1,124 @@
+# docker-compose.yml - SAPIENTIA LICENSE SERVER COMPLETO
+# ============================================================================
+
+services:
+  # Sapientia License Server
+  sapientia:
+    build: .
+    container_name: sapientia-license-server
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - SAPIENTIA_HOST=0.0.0.0
+      - SAPIENTIA_PORT=8000
+      - SAPIENTIA_DEBUG=false
+      - SAPIENTIA_DATABASE_URL=sqlite:///data/sapientia_licenses.db
+      - SAPIENTIA_SECRET_KEY=sapientia-pedro-diaz-nicolas-2025-super-secret
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./frontend:/app/frontend:ro  # Solo lectura para frontend
+    networks:
+      - sapientia-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sapientia.rule=Host(`licenses.localhost`)"
+      - "traefik.http.routers.sapientia.entrypoints=web"
+      - "traefik.http.services.sapientia.loadbalancer.server.port=8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL para producción (opcional, puedes usar tu setup existente)
+  postgres:
+    image: postgres:15-alpine
+    container_name: sapientia-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sapientia
+      POSTGRES_USER: sapientia
+      POSTGRES_PASSWORD: sapientia_pedro_2025
+      PGPORT: 5450
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5450:5450"  # Puerto diferente a tu Odoo
+    networks:
+      - sapientia-network
+    command: postgres -p 5450
+
+  # Redis para cache (opcional)
+  redis:
+    image: redis:7-alpine
+    container_name: sapientia-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sapientia-network
+
+  # Nginx reverse proxy (opcional)
+  nginx:
+    image: nginx:alpine
+    container_name: sapientia-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro  # Para certificados SSL
+    depends_on:
+      - sapientia
+    networks:
+      - sapientia-network
+
+  # Monitoring con Prometheus (opcional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: sapientia-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - sapientia-network
+
+  # Grafana para dashboards (opcional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: sapientia-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=sapientia2025
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - sapientia-network
+
+# Configuración de red
+networks:
+  sapientia-network:
+    driver: bridge
+    name: sapientia-network
+
+# Volúmenes persistentes
+volumes:
+  postgres_data:
+    name: sapientia-postgres-data
+  redis_data:
+    name: sapientia-redis-data
+  prometheus_data:
+    name: sapientia-prometheus-data
+  grafana_data:
+    name: sapientia-grafana-data

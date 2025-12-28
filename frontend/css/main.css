@@ -1,0 +1,350 @@
+/* main.css - ARCHIVO PRINCIPAL QUE IMPORTA TODOS LOS MÓDULOS CSS */
+
+/* ============================================================================
+   SAPIENTIA LICENSE SERVER - CSS MODULAR
+   Pedro Diaz Nicolas - Sistema Universal de Licenciamiento
+   ============================================================================ */
+
+/* Importar módulos CSS en el orden correcto */
+@import url('variables.css');      /* Variables primero */
+@import url('base.css');          /* Reset y estilos base */
+@import url('components.css');    /* Componentes reutilizables */
+@import url('forms.css');         /* Formularios */
+@import url('layout.css');        /* Layout y navegación */
+@import url('dashboard.css');     /* Dashboard específico */
+@import url('control-panel.css'); /* Panel de control */
+@import url('responsive.css');    /* Media queries responsive */
+@import url('license-types-admin.css');
+
+/* ============================================================================
+   UTILIDADES ADICIONALES
+   ============================================================================ */
+
+/* Clases de utilidad que no están en otros archivos */
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-wrap {
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.cursor-pointer { cursor: pointer; }
+.cursor-not-allowed { cursor: not-allowed; }
+
+.select-none { user-select: none; }
+.select-all { user-select: all; }
+
+.pointer-events-none { pointer-events: none; }
+.pointer-events-auto { pointer-events: auto; }
+
+/* Margins y paddings dinámicos */
+.m-0 { margin: 0 !important; }
+.mt-auto { margin-top: auto !important; }
+.mb-auto { margin-bottom: auto !important; }
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
+
+.p-0 { padding: 0 !important; }
+
+/* Flex utilities */
+.flex { display: flex !important; }
+.flex-col { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-1 { flex: 1 1 0% !important; }
+
+.items-center { align-items: center !important; }
+.items-start { align-items: flex-start !important; }
+.items-end { align-items: flex-end !important; }
+
+.justify-center { justify-content: center !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-end { justify-content: flex-end !important; }
+
+/* Grid utilities */
+.grid { display: grid !important; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+
+.gap-1 { gap: var(--spacing-xs) !important; }
+.gap-2 { gap: var(--spacing-sm) !important; }
+.gap-4 { gap: var(--spacing-md) !important; }
+.gap-6 { gap: var(--spacing-lg) !important; }
+
+/* Position utilities */
+.relative { position: relative !important; }
+.absolute { position: absolute !important; }
+.fixed { position: fixed !important; }
+.sticky { position: sticky !important; }
+
+/* Z-index utilities */
+.z-0 { z-index: 0 !important; }
+.z-10 { z-index: 10 !important; }
+.z-20 { z-index: 20 !important; }
+.z-50 { z-index: 50 !important; }
+
+/* Width utilities */
+.w-full { width: 100% !important; }
+.w-auto { width: auto !important; }
+.w-fit { width: fit-content !important; }
+
+.max-w-xs { max-width: 20rem !important; }
+.max-w-sm { max-width: 24rem !important; }
+.max-w-md { max-width: 28rem !important; }
+.max-w-lg { max-width: 32rem !important; }
+.max-w-xl { max-width: 36rem !important; }
+.max-w-full { max-width: 100% !important; }
+
+/* Height utilities */
+.h-full { height: 100% !important; }
+.h-screen { height: 100vh !important; }
+.h-auto { height: auto !important; }
+
+/* Overflow utilities */
+.overflow-hidden { overflow: hidden !important; }
+.overflow-auto { overflow: auto !important; }
+.overflow-x-auto { overflow-x: auto !important; }
+.overflow-y-auto { overflow-y: auto !important; }
+
+/* ============================================================================
+   ESTADOS ESPECIALES
+   ============================================================================ */
+
+/* Estado de carga global */
+.app-loading {
+    overflow: hidden;
+}
+
+.app-loading * {
+    pointer-events: none;
+}
+
+/* Estado de error global */
+.app-error {
+    border: 2px solid var(--accent-red);
+}
+
+/* Estado de éxito */
+.app-success {
+    border: 2px solid var(--accent-green);
+}
+
+/* ============================================================================
+   MODO DEBUG (solo en desarrollo)
+   ============================================================================ */
+
+.debug {
+    border: 1px solid red !important;
+    background: rgba(255, 0, 0, 0.1) !important;
+}
+
+.debug * {
+    border: 1px solid blue !important;
+}
+
+/* ============================================================================
+   TEMA PERSONALIZADO PARA SAPIENTIA
+   ============================================================================ */
+
+/* Gradientes específicos de Sapientia */
+.gradient-sapientia {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+}
+
+.gradient-sapientia-text {
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Bordes con efecto neón */
+.neon-border {
+    border: 1px solid var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.neon-border:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+/* Efectos de glass morphism */
+.glass {
+    background: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================================================
+   ANIMACIONES PERSONALIZADAS
+   ============================================================================ */
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-slide-up {
+    animation: slideInUp var(--transition-normal);
+}
+
+.animate-slide-down {
+    animation: slideInDown var(--transition-normal);
+}
+
+.animate-scale-in {
+    animation: scaleIn var(--transition-normal);
+}
+
+/* ============================================================================
+   PRINT STYLES ADICIONALES
+   ============================================================================ */
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-only {
+        display: block !important;
+    }
+    
+    /* Asegurar que las licencias se impriman correctamente */
+    .license-item {
+        page-break-inside: avoid;
+        margin-bottom: 1rem;
+        border: 1px solid #000;
+    }
+    
+    .license-key {
+        font-weight: bold;
+        padding: 0.5rem;
+        background: #f0f0f0;
+    }
+}
+
+/* ============================================================================
+   COMPATIBILIDAD CON NAVEGADORES ANTIGUOS
+   ============================================================================ */
+
+/* Fallback para navegadores que no soportan CSS Grid */
+@supports not (display: grid) {
+    .stats-grid,
+    .dashboard-grid,
+    .form-grid {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .stats-grid > *,
+    .dashboard-grid > *,
+    .form-grid > * {
+        flex: 1;
+        min-width: 250px;
+        margin: var(--spacing-sm);
+    }
+}
+
+/* Fallback para navegadores que no soportan CSS Custom Properties */
+@supports not (color: var(--accent-cyan)) {
+   :root {
+    --accent-green: #22c55e;
+    --accent-blue: #3b82f6;
+    --accent-yellow: #eab308;
+    --accent-red: #ef4444;
+}
+    
+    .btn-primary {
+        background: #00ffff;
+        color: #000000;
+    }
+    
+    .accent-color {
+        color: #00ffff;
+    }
+}
+
+/* ============================================================================
+   MODO ALTA CONTRASTE
+   ============================================================================ */
+
+@media (prefers-contrast: high) {
+    .btn {
+        border-width: 2px;
+        font-weight: 700;
+    }
+    
+    .card {
+        border-width: 2px;
+    }
+    
+    .nav-tab.active {
+        border: 3px solid currentColor;
+    }
+}
+
+/* ADMIN INTERFACE */
+.admin-interface { padding: 1rem; }
+.admin-nav { margin-bottom: 2rem; }
+.admin-tabs { display: flex; gap: 1rem; margin-top: 1rem; }
+.admin-tab { 
+    padding: 0.75rem 1.5rem; 
+    border: 1px solid var(--border-color);
+    background: var(--card-background);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.admin-tab.active { 
+    background: var(--accent-primary); 
+    color: white; 
+}
+.admin-content-area { min-height: 400px; }
+
+/* MODULES ADMIN */
+.modules-admin-content { padding: 1rem; }
+.search-section { margin-bottom: 2rem; }
+.create-module-section { 
+    margin-top: 3rem; 
+    padding: 2rem;
+    background: var(--card-background);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+.form-actions { 
+    grid-column: 1 / -1; 
+    display: flex; 
+    gap: 1rem; 
+    margin-top: 2rem; 
+}

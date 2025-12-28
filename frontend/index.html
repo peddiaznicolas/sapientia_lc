@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sapientia License Server - Pedro Diaz Nicolas</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🚀</text></svg>">
+    
+    <!-- Meta datos -->
+    <meta name="description" content="Sistema Universal de Licenciamiento - Sapientia License Server por Pedro Diaz Nicolas">
+    <meta name="author" content="Pedro Diaz Nicolas">
+    <meta name="keywords" content="licencias, odoo, sapientia, pedro diaz nicolas">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS MODULAR -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/license-types-admin.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo gradient-sapientia-text">🚀 SAPIENTIA</h1>
+                <p class="subtitle">Sistema Universal de Licenciamiento</p>
+                <div class="header-meta">
+                    <div class="author">Por Pedro Diaz Nicolas - Desarrollador Fullstack</div>
+                    <div class="status">
+                        <div class="status-dot"></div>
+                        <span class="status-text" id="server-status">Verificando servidor...</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- NAVEGACIÓN -->
+        <nav class="nav-tabs" role="tablist">
+            <button class="nav-tab active" data-tab="dashboard" role="tab" 
+                    aria-selected="true" aria-controls="dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </button>
+            <button class="nav-tab" data-tab="generate" role="tab" 
+                    aria-selected="false" aria-controls="generate">
+                <span class="nav-icon">🎫</span>
+                <span class="nav-text">Generar</span>
+            </button>
+            <button class="nav-tab" data-tab="validate" role="tab" 
+                    aria-selected="false" aria-controls="validate">
+                <span class="nav-icon">✅</span>
+                <span class="nav-text">Validar</span>
+            </button>
+            <button class="nav-tab" data-tab="admin" role="tab" 
+                    aria-selected="false" aria-controls="admin">
+                <span class="nav-icon">🔧</span>
+                <span class="nav-text">Admin</span>
+            </button>
+            <button class="nav-tab" data-tab="control" role="tab" 
+                    aria-selected="false" aria-controls="control">
+                <span class="nav-icon">🛡️</span>
+                <span class="nav-text">Control</span>
+            </button>
+        </nav>
+
+        <!-- CONTENIDO DINÁMICO -->
+        <main id="content-area" class="content-area" role="main">
+            <!-- El contenido se carga dinámicamente aquí -->
+        </main>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 Pedro Diaz Nicolas - Sapientia License Server v2.0.0</p>
+                <div class="footer-links">
+                    <span id="server-info">🌐 Conectando...</span>
+                    <span>⚡ Enterprise Edition</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay Global -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading"></div>
+            <p>Cargando...</p>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- JAVASCRIPT MODULAR -->
+    
+    <script src="js/config.js"></script>
+    <script src="js/api-client.js"></script>
+    <script src="js/hardware-detection.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/modules/dashboard.js"></script>
+    <script src="js/modules/license-generator.js"></script>
+    <script src="js/modules/license-validator.js"></script>
+    <script src="js/modules/module-admin.js"></script>
+    <script src="js/modules/license-types-admin.js"></script>
+    <script src="js/modules/control-panel.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- Script de Integración -->
+    <script>
+        // Configurar información del servidor
+        window.addEventListener('DOMContentLoaded', () => {
+            // Configurar actualización de estado del servidor
+            const updateServerStatus = () => {
+                const statusText = document.getElementById('server-status');
+                const serverInfo = document.getElementById('server-info');
+                const statusDot = document.querySelector('.status-dot');
+                
+                const status = window.SAPIENTIA?.state?.serverStatus || 'unknown';
+                
+                const statusConfig = {
+                    online: { 
+                        text: 'Servidor Conectado', 
+                        info: '🟢 Conectado',
+                        color: 'var(--accent-green)',
+                        class: 'online'
+                    },
+                    offline: { 
+                        text: 'Servidor Desconectado', 
+                        info: '🔴 Desconectado',
+                        color: 'var(--accent-red)',
+                        class: 'offline'
+                    },
+                    unknown: { 
+                        text: 'Verificando servidor...', 
+                        info: '🟡 Verificando...',
+                        color: 'var(--accent-yellow)',
+                        class: 'unknown'
+                    }
+                };
+                
+                const config = statusConfig[status] || statusConfig.unknown;
+                
+                if (statusText) {
+                    statusText.textContent = config.text;
+                    statusText.className = `status-text ${config.class}`;
+                }
+                
+                if (serverInfo) {
+                    serverInfo.innerHTML = config.info;
+                }
+                
+                if (statusDot) {
+                    statusDot.style.backgroundColor = config.color;
+                }
+            };
+            
+            // Actualizar estado inicialmente
+            updateServerStatus();
+            
+            // Escuchar cambios de estado
+            if (window.SAPIENTIA?.events) {
+                window.SAPIENTIA.events.on('serverStatusChanged', updateServerStatus);
+                window.SAPIENTIA.events.on('appReady', () => {
+                    setTimeout(updateServerStatus, 1000);
+                });
+            }
+            
+            // Actualizar cada 30 segundos
+            setInterval(updateServerStatus, 30000);
+            
+            // Debug info
+            console.log('🚀 Sapientia License Server - Frontend Modular Integrado');
+            console.log('📧 Pedro Diaz Nicolas - pedro@diaznicolas.com');
+            console.log('🌟 Sistema Enterprise Edition v2.0.0');
+            
+            // Mostrar información de módulos cargados después de inicialización
+            setTimeout(() => {
+                if (window.sapientiaApp?.isInitialized) {
+                    console.log('✅ Módulos cargados:', window.sapientiaApp.getAllModules());
+                }
+            }, 2000);
+        });
+        
+        // Atajos de teclado adicionales
+        document.addEventListener('keydown', (e) => {
+            // Ctrl + Shift + D = Dashboard
+            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                e.preventDefault();
+                if (window.navigationManager) {
+                    window.navigationManager.showTab('dashboard');
+                }
+            }
+            
+            // Ctrl + Shift + G = Generate
+            if (e.ctrlKey && e.shiftKey && e.key === 'G') {
+                e.preventDefault();
+                if (window.navigationManager) {
+                    window.navigationManager.showTab('generate');
+                }
+            }
+            
+            // Ctrl + Shift + V = Validate
+            if (e.ctrlKey && e.shiftKey && e.key === 'V') {
+                e.preventDefault();
+                if (window.navigationManager) {
+                    window.navigationManager.showTab('validate');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
